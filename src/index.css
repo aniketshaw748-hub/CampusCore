@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* CampusCore Design System - Academic Navy Theme */
+    --background: 220 20% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary: Deep Indigo - Academic, Scholarly */
+    --primary: 226 70% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 226 70% 55%;
+
+    /* Secondary: Soft slate */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted: Subtle grays */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    /* Accent: Warm amber for urgency/highlights */
+    --accent: 38 92% 50%;
+    --accent-foreground: 222 47% 11%;
+
+    /* Semantic colors */
+    --success: 142 72% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Urgency colors */
+    --urgency-low: 142 72% 40%;
+    --urgency-medium: 38 92% 50%;
+    --urgency-high: 0 84% 60%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 226 70% 45%;
+
+    --radius: 0.75rem;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(226, 70%, 45%) 0%, hsl(226, 70%, 55%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(226, 70%, 45%) 0%, hsl(250, 60%, 50%) 50%, hsl(226, 70%, 55%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(220, 20%, 98%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(38, 92%, 50%) 0%, hsl(25, 95%, 53%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(226 70% 45% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(226 70% 45% / 0.1), 0 2px 4px -2px hsl(226 70% 45% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(226 70% 45% / 0.1), 0 4px 6px -4px hsl(226 70% 45% / 0.1);
+    --shadow-glow: 0 0 40px hsl(226 70% 45% / 0.2);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 226 70% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 226 70% 45%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 226 70% 55%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 226 70% 65%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 38 92% 50%;
+    --accent-foreground: 222 47% 11%;
+
+    --success: 142 72% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 226 70% 55%;
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 226 70% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 226 70% 55%;
+  }
+
+  /* Exam Mode Theme - Red/Urgent */
+  .exam-mode {
+    --background: 0 20% 98%;
+    --foreground: 0 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 47% 11%;
+
+    --primary: 0 72% 51%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 0 72% 61%;
+
+    --secondary: 0 14% 96%;
+    --secondary-foreground: 0 47% 11%;
+
+    --muted: 0 14% 96%;
+    --muted-foreground: 0 9% 46%;
+
+    --accent: 0 84% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --border: 0 13% 85%;
+    --input: 0 13% 91%;
+    --ring: 0 72% 51%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(0, 72%, 51%) 0%, hsl(0, 72%, 61%) 100%);
+    --shadow-glow: 0 0 40px hsl(0 72% 51% / 0.2);
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 47% 11%;
+    --sidebar-primary: 0 72% 51%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 14% 96%;
+    --sidebar-accent-foreground: 0 47% 11%;
+    --sidebar-border: 0 13% 85%;
+    --sidebar-ring: 0 72% 51%;
+  }
+
+  .dark.exam-mode {
+    --background: 0 47% 6%;
+    --foreground: 0 40% 98%;
+
+    --card: 0 47% 8%;
+    --card-foreground: 0 40% 98%;
+
+    --popover: 0 47% 8%;
+    --popover-foreground: 0 40% 98%;
+
+    --primary: 0 72% 55%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 0 72% 65%;
+
+    --secondary: 0 33% 17%;
+    --secondary-foreground: 0 40% 98%;
+
+    --muted: 0 33% 17%;
+    --muted-foreground: 0 20% 65%;
+
+    --accent: 0 84% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --border: 0 33% 17%;
+    --input: 0 33% 17%;
+    --ring: 0 72% 55%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(0, 72%, 55%) 0%, hsl(0, 72%, 65%) 100%);
+    --shadow-glow: 0 0 40px hsl(0 72% 55% / 0.3);
+
+    --sidebar-background: 0 47% 8%;
+    --sidebar-foreground: 0 40% 98%;
+    --sidebar-primary: 0 72% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 33% 17%;
+    --sidebar-accent-foreground: 0 40% 98%;
+    --sidebar-border: 0 33% 17%;
+    --sidebar-ring: 0 72% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    @apply tracking-tight;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+  }
+
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted/50 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50 transition-colors;
+}

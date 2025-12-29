@@ -1,73 +1,121 @@
-# Welcome to your Lovable project
+# CampusCore
 
-## Project info
+CampusCore is a role-based academic platform designed for college students and faculty, centered around **CampusGPT** — a syllabus-aware, exam-focused AI assistant for personalized learning and exam preparation.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+---
 
-## How can I edit this code?
+## 🚀 Overview
 
-There are several ways of editing your application.
+CampusCore provides:
+- Separate dashboards for **Students**, **Faculty**, and **Admins**
+- Faculty-driven academic content (notices, syllabus, study materials)
+- Student personal notes and uploads
+- CampusGPT: an AI assistant tailored for college academics
+- Exam-focused learning modes with syllabus and subject scoping
 
-**Use Lovable**
+The goal is to offer a **college-first alternative to generic AI chatbots**, optimized for exams, coursework, and institutional workflows.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🧑‍🎓 Key Features
 
-**Use your preferred IDE**
+### Student
+- Personalized dashboard
+- Priority-based notices
+- CampusGPT (normal mode + exam mode)
+- Exam-scoped preparation (unit tests, midsems, endsems)
+- Personal notes management
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Faculty
+- Upload syllabus, notices, and study materials
+- Set urgency, deadlines, and exam relevance
+- Faculty dashboard with recent uploads
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Admin
+- Separate admin dashboard
+- User and content management (extensible)
 
-Follow these steps:
+---
+
+## 🧠 CampusGPT Highlights
+
+- Exam Mode with syllabus locking
+- Subject- and unit-specific preparation
+- Faculty material prioritized over student notes
+- Persistent memory and custom instructions (planned backend integration)
+- Academic tone and mark-optimized answers
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui
+- Lucide Icons
+
+### Architecture (Planned Backend)
+- Gemini-powered AI (via RAG)
+- Vector database for academic content
+- Metadata-driven retrieval and personalization
+
+---
+
+## 📦 Getting Started (Local Development)
+
+### Prerequisites
+- Node.js (18+ recommended)
+- npm (or compatible package manager)
+
+### Setup
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate into the project
+cd campuscore
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
-```
 
-**Edit a file directly in GitHub**
+The app will be available at:
+http://localhost:5173
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Project Structure
+src/
+├── components/
+│   ├── dashboard/
+│   ├── layout/
+│   └── ui/
+├── contexts/
+├── pages/
+├── lib/
+└── types/
 
-**Use GitHub Codespaces**
+🧭 Roadmap
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Backend ingestion pipeline for faculty & student content
 
-## What technologies are used for this project?
+Vector search + retrieval logic
 
-This project is built with:
+Gemini-powered reasoning layer
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Persistent AI memory and personalization
 
-## How can I deploy this project?
+Faculty analytics and feedback loop
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+📄 License
 
-## Can I connect a custom domain to my Lovable project?
+This project is under active development.
+License and usage terms will be defined later.
 
-Yes, you can!
+✨ Summary
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+CampusCore is a college-focused academic platform with an exam-aware AI assistant designed to help students prepare smarter, not harder.

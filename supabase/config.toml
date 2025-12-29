@@ -1,0 +1,21 @@
+project_id = "titwpalbrclzipnmomes"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+
+[auth]
+enabled = true
+
+[[functions]]
+name = "campus-gpt"
+verify_jwt = false
+
+[[functions]]
+name = "generate-exam"
+verify_jwt = false
+
+[[functions]]
+name = "extract-memory"
+verify_jwt = false
