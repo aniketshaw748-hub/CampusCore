@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Brain, Send, Loader2, Sparkles, BookOpen, User } from 'lucide-react';
+import { Brain, Send, Loader2, Sparkles, BookOpen, User, ChevronUp, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { CampusGPTSettings } from '@/components/campus-gpt/CampusGPTSettings';
@@ -47,6 +47,7 @@ function CampusGPTContent() {
   const [memories, setMemories] = useState<Memory[]>([]);
   const [customInstructions, setCustomInstructions] = useState<CustomInstructions | null>(null);
   const [isLoadingMemory, setIsLoadingMemory] = useState(true);
+  const [showResources, setShowResources] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const messageCountRef = useRef(0);
@@ -219,7 +220,31 @@ function CampusGPTContent() {
 
         {/* Exam Config or Resources */}
         {isExamMode && !isConfigured && <div className="mb-4"><ExamConfigFlow /></div>}
-        {isConfigured && <div className="mb-4"><ExamResourcesPanel /></div>}
+        {isConfigured && (
+          <div className="mb-4">
+            <div className="flex justify-end mb-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowResources(!showResources)}
+                className="h-6 text-xs text-muted-foreground hover:text-foreground"
+              >
+                {showResources ? (
+                  <>
+                    Hide Resources
+                    <ChevronUp className="ml-2 w-3 h-3" />
+                  </>
+                ) : (
+                  <>
+                    Show Resources
+                    <ChevronDown className="ml-2 w-3 h-3" />
+                  </>
+                )}
+              </Button>
+            </div>
+            {showResources && <ExamResourcesPanel />}
+          </div>
+        )}
 
         {/* Chat Area */}
         <Card className="flex-1 flex flex-col overflow-hidden">
