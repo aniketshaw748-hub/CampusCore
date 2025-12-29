@@ -89,7 +89,7 @@ export default function UploadContent() {
       const branch = branches.find(b => b.code === selectedBranch);
 
       const { error } = await supabase.from('faculty_uploads').insert({
-        uploaded_by: 'demo-user',
+        uploaded_by: profile.full_name,
         title,
         description: description || null,
         content_type: contentType,

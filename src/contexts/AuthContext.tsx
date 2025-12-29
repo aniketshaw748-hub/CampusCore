@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { Profile, AppRole } from '@/types';
+import { auth } from '@/lib/firebase'; // Ensure your firebase config is exported here
+import { onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
 
 interface AuthContextType {
   profile: Profile | null;
@@ -12,50 +14,54 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Demo mode - no real authentication
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [userRole, setUserRole] = useState<AppRole | null>(() => {
-    const saved = localStorage.getItem('demo_role');
-    return saved as AppRole | null;
+    return localStorage.getItem('user_role') as AppRole | null;
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load demo profile based on role
-    if (userRole) {
-      setProfile({
-        id: 'demo-user',
-        email: `demo-${userRole}@campus.edu`,
-        full_name: userRole === 'student' ? 'Demo Student' : userRole === 'faculty' ? 'Prof. Demo' : 'Admin User',
-        avatar_url: null,
-        branch: 'CS',
-        semester: 4,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      });
-    }
-  }, [userRole]);
-
-  const setDemoRole = (role: AppRole) => {
-    localStorage.setItem('demo_role', role);
-    setUserRole(role);
-    setProfile({
-      id: 'demo-user',
-      email: `demo-${role}@campus.edu`,
-      full_name: role === 'student' ? 'Demo Student' : role === 'faculty' ? 'Prof. Demo' : 'Admin User',
-      avatar_url: null,
-      branch: 'CS',
-      semester: 4,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+    // This is the core Firebase listener
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Map Firebase user details to your Profile type
+        setProfile({
+          id: user.uid,
+          email: user.email || '',
+          full_name: user.displayName || 'Anonymous User',
+          avatar_url: user.photoURL,
+          branch: userRole == "student" ? 'CS' : null, // Defaulting these as they come from your DB later
+          semester: userRole == "student" ? 4 : null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+      } else {
+        setProfile(null);
+        setUserRole(null);
+        localStorage.removeItem('user_role');
+      }
+      setLoading(false);
     });
+
+    return () => unsubscribe(); // Cleanup listener on unmount
+  }, []);
+
+  // Updates the role and persists it in LocalStorage
+  const setDemoRole = (role: AppRole) => {
+    localStorage.setItem('user_role', role);
+    setUserRole(role);
   };
 
-  const signOut = () => {
-    localStorage.removeItem('demo_role');
-    setUserRole(null);
-    setProfile(null);
+  const signOut = async () => {
+    try {
+      await firebaseSignOut(auth);
+      localStorage.removeItem('user_role');
+      setUserRole(null);
+      setProfile(null);
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   const updateProfile = (updates: Partial<Profile>) => {

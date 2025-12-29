@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/components/theme-provider";
 import Index from "./pages/Index";
-import Landing from "./pages/Landing";
+// import Landing from "./pages/login";
 import Dashboard from "./pages/Dashboard";
 import UploadContent from "./pages/UploadContent";
 import Notices from "./pages/Notices";
@@ -16,6 +16,7 @@ import MyNotes from "./pages/MyNotes";
 import Settings from "./pages/Settings";
 import AdminManage from "./pages/AdminManage";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/login";
 
 const queryClient = new QueryClient();
 
@@ -29,7 +30,7 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/landing" element={<Landing />} />
+              <Route path="/landing" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/dashboard/upload" element={<UploadContent />} />
               <Route path="/dashboard/notices" element={<Notices />} />
