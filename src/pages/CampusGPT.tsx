@@ -38,6 +38,87 @@ interface CustomInstructions {
   about_me: string | null;
 }
 
+// Custom Markdown Renderer to avoid dependency crashes
+const FormattedMessage = ({ content }: { content: string }) => {
+  const lines = content.split('\n');
+  const elements: React.ReactNode[] = [];
+  let currentList: React.ReactNode[] = [];
+  let inList = false;
+
+  const parseInline = (text: string) => {
+    // Split by bold (**...**) and italic (*...*) markers
+    const parts = text.split(/(\*\*.*?\*\*|\*.*?\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="font-bold text-foreground">{part.slice(2, -2)}</strong>;
+      }
+      if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
+        return <em key={i} className="italic text-foreground/90">{part.slice(1, -1)}</em>;
+      }
+      return part;
+    });
+  };
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+    
+    // List Items
+    if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+      const text = trimmed.substring(2);
+      currentList.push(
+        <li key={`li-${index}`} className="mb-1 text-sm leading-relaxed">
+          {parseInline(text)}
+        </li>
+      );
+      inList = true;
+    } else {
+      // Flush any active list
+      if (inList) {
+        elements.push(
+          <ul key={`ul-${index}`} className="list-disc pl-5 mb-3 space-y-1">
+            {[...currentList]}
+          </ul>
+        );
+        currentList = [];
+        inList = false;
+      }
+
+      // Headings
+      if (line.startsWith('### ')) {
+        elements.push(<h3 key={index} className="text-sm font-bold mt-4 mb-2 text-foreground">{parseInline(line.substring(4))}</h3>);
+      } else if (line.startsWith('## ')) {
+        elements.push(<h2 key={index} className="text-base font-bold mt-5 mb-3 text-foreground">{parseInline(line.substring(3))}</h2>);
+      } else if (line.startsWith('# ')) {
+        elements.push(<h1 key={index} className="text-lg font-bold mt-6 mb-4 text-foreground">{parseInline(line.substring(2))}</h1>);
+      }
+      // Code Blocks (simple detection)
+      else if (trimmed.startsWith('```')) {
+         // skip for now or render as plain, complex code blocks need more logic
+         elements.push(<div key={index} className="bg-muted p-2 rounded text-xs font-mono my-2 overflow-x-auto">{line}</div>);
+      }
+      // Standard Paragraphs
+      else if (trimmed !== '') {
+        elements.push(
+          <p key={index} className="mb-3 text-sm leading-relaxed last:mb-0">
+            {parseInline(line)}
+          </p>
+        );
+      }
+    }
+  });
+
+  // Flush remaining list if file ends with list
+  if (inList) {
+    elements.push(
+      <ul key={`ul-end`} className="list-disc pl-5 mb-3 space-y-1">
+        {[...currentList]}
+      </ul>
+    );
+  }
+
+  return <div className="text-foreground/90">{elements}</div>;
+};
+
 function CampusGPTContent() {
   const { profile, userRole } = useAuth();
   const { isExamMode, examContext } = useExamMode();
@@ -265,7 +346,11 @@ function CampusGPTContent() {
                   <div key={message.id} className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
                     {message.role === 'assistant' && <Avatar className="w-8 h-8 shrink-0"><AvatarFallback className={isExamMode ? 'bg-primary text-primary-foreground' : 'gradient-primary text-primary-foreground'}><Brain className="w-4 h-4" /></AvatarFallback></Avatar>}
                     <div className={`max-w-[80%] rounded-xl px-4 py-3 ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
-                      <p className="whitespace-pre-wrap">{message.content}</p>
+                      {message.role === 'user' ? (
+                        <p className="whitespace-pre-wrap">{message.content}</p>
+                      ) : (
+                        <FormattedMessage content={message.content} />
+                      )}
                       {message.source_label && message.role === 'assistant' && <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground"><BookOpen className="w-3 h-3" />{message.source_label}</div>}
                     </div>
                     {message.role === 'user' && <Avatar className="w-8 h-8 shrink-0"><AvatarImage src={profile?.avatar_url || ''} /><AvatarFallback className="bg-primary/10"><User className="w-4 h-4" /></AvatarFallback></Avatar>}
