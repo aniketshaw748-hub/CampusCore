@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Logo from '@/assets/CampusCoreLogo.svg';
+import RedLogo from '@/assets/RedCampusCore.svg';
 import {
   Bell,
   MessageSquare,
@@ -54,10 +55,10 @@ const adminNav: NavItem[] = [
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { profile, userRole, signOut } = useAuth();
+  const { profile, isExam, userRole, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-
+  const currentLogo = isExam ? RedLogo : Logo;
   const navItems = userRole === 'admin' ? adminNav : userRole === 'faculty' ? facultyNav : studentNav;
 
   const handleSignOut = async () => {
@@ -70,12 +71,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile Header */}
       <header className="lg:hidden fixed top-0 left-0 right-0 h-16 glass z-50 flex items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <img
-              src={Logo}
-              alt="CampusCore logo"
-              className="w-10 h-10 rounded-lg"
-            />
-          <span className="font-bold font-display">CampusCore</span>
+          <img src={currentLogo} alt="Logo" className="w-10 h-10 rounded-lg" />
+          <span className={cn("font-bold", isExam && "text-destructive")}>CampusCore</span>
         </Link>
         <button onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -92,12 +89,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       >
         {/* Logo */}
         <div className="h-16 flex items-center gap-2 px-4 border-b border-sidebar-border">
-          <img
-              src={Logo}
-              alt="CampusCore logo"
-              className="w-10 h-10 rounded-lg"
-            />
-          <span className="text-xl font-bold font-display">CampusCore</span>
+          <img src={currentLogo} alt="Logo" className="w-10 h-10 rounded-lg transition-all duration-500" />
+          <span className={cn("text-xl font-bold", isExam && "text-destructive")}>
+            CampusCore
+          </span>
         </div>
 
         {/* Navigation */}
