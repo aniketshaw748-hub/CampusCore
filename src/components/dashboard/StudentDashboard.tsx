@@ -4,11 +4,49 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Bell, BookOpen, MessageSquare, Calendar, FileText, Loader2, CheckCircle } from 'lucide-react';
+import { Bell, BookOpen, MessageSquare, FileText, Loader2, CheckCircle, Building2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import type { Branch, FacultyUpload } from '@/types';
 import { NoticeCard } from './NoticeCard';
+
+// --- DEMO DATA FOR STUDENT FEED ---
+const DEMO_NOTICES: FacultyUpload[] = [
+  {
+    id: 'demo-1',
+    uploaded_by: 'admin',
+    title: 'End-Semester Theory Exam Schedule',
+    description: 'The official timetable for the Winter 2025 examinations has been released. Exams begin from Jan 15th.',
+    content_type: 'notice',
+    file_url: '#',
+    file_name: 'exam_timetable_v1.pdf',
+    branch_id: 'all',
+    semester: null,
+    subject_id: null,
+    urgency: 'high',
+    deadline: '2025-01-15T09:00:00Z',
+    is_exam_related: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'demo-2',
+    uploaded_by: 'faculty',
+    title: 'Machine Learning Lab Manual',
+    description: 'Updated lab manual for Semester 6 Computer Science. Includes new experiments on Neural Networks.',
+    content_type: 'study_material',
+    file_url: '#',
+    file_name: 'ML_Lab_Manual.pdf',
+    branch_id: 'CS',
+    semester: 6,
+    subject_id: 'CS601',
+    urgency: 'low',
+    deadline: null,
+    is_exam_related: false,
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 86400000).toISOString(),
+  }
+];
 
 export function StudentDashboard() {
   const { profile, updateProfile } = useAuth();
@@ -24,10 +62,8 @@ export function StudentDashboard() {
 
   useEffect(() => {
     fetchBranches();
-    if (!needsSetup) {
-      fetchNotices();
-    }
-  }, [profile]);
+    fetchNotices();
+  }, [profile?.branch, profile?.semester]);
 
   const fetchBranches = async () => {
     const { data } = await supabase.from('branches').select('*').order('name');
@@ -36,15 +72,22 @@ export function StudentDashboard() {
   };
 
   const fetchNotices = async () => {
-    const { data } = await supabase
-      .from('faculty_uploads')
-      .select('*')
-      .order('deadline', { ascending: true, nullsFirst: false })
-      .order('urgency', { ascending: false })
-      .order('created_at', { ascending: false })
-      .limit(10);
-    
-    if (data) setNotices(data as FacultyUpload[]);
+    try {
+      const { data, error } = await supabase
+        .from('faculty_uploads')
+        .select('*')
+        .order('urgency', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(5);
+      
+      if (error) throw error;
+      
+      // Combine Real Data with Demo Data
+      const combined = data && data.length > 0 ? [...data, ...DEMO_NOTICES] : DEMO_NOTICES;
+      setNotices(combined as FacultyUpload[]);
+    } catch (err) {
+      setNotices(DEMO_NOTICES); // Fallback if network fails
+    }
   };
 
   const handleSavePreferences = async () => {
@@ -55,12 +98,12 @@ export function StudentDashboard() {
 
     setSaving(true);
     try {
-      updateProfile({ 
+      await updateProfile({ 
         branch: selectedBranch, 
         semester: parseInt(selectedSemester) 
       });
       toast.success('Preferences saved!');
-      fetchNotices();
+      // Notices will re-fetch automatically due to useEffect dependency
     } catch (error: any) {
       toast.error(error.message || 'Failed to save preferences');
     } finally {
@@ -78,40 +121,48 @@ export function StudentDashboard() {
 
   if (needsSetup) {
     return (
-      <div className="max-w-xl mx-auto">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-primary" />
-              Setup Your Profile
-            </CardTitle>
+      <div className="max-w-xl mx-auto py-10">
+        <Card className="border-primary/20 shadow-xl">
+          <CardHeader className="text-center">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Building2 className="w-8 h-8 text-primary" />
+            </div>
+            <CardTitle className="text-2xl">Personalize Your Feed</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
-              Select your branch and semester to see personalized notices and content.
+          <CardContent className="space-y-6">
+            <p className="text-muted-foreground text-center">
+              We need to know your course details to show you the right assignments and notices.
             </p>
             
-            <div className="space-y-3">
-              <div>
-                <label className="text-sm font-medium mb-1.5 block">Branch</label>
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Your Branch</label>
                 <Select value={selectedBranch} onValueChange={setSelectedBranch}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Select your branch" />
                   </SelectTrigger>
                   <SelectContent>
-                    {branches.map((branch) => (
-                      <SelectItem key={branch.id} value={branch.code}>
-                        {branch.name} ({branch.code})
-                      </SelectItem>
-                    ))}
+                    {branches.length > 0 ? (
+                      branches.map((branch) => (
+                        <SelectItem key={branch.id} value={branch.code}>
+                          {branch.name} ({branch.code})
+                        </SelectItem>
+                      ))
+                    ) : (
+                      // Fallback if DB is empty
+                      <>
+                        <SelectItem value="CS">Computer Science (CS)</SelectItem>
+                        <SelectItem value="EC">Electronics (EC)</SelectItem>
+                      </>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
 
-              <div>
-                <label className="text-sm font-medium mb-1.5 block">Semester</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Current Semester</label>
                 <Select value={selectedSemester} onValueChange={setSelectedSemester}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Select semester" />
                   </SelectTrigger>
                   <SelectContent>
@@ -125,15 +176,8 @@ export function StudentDashboard() {
               </div>
             </div>
 
-            <Button onClick={handleSavePreferences} disabled={saving} className="w-full">
-              {saving ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                'Save Preferences'
-              )}
+            <Button onClick={handleSavePreferences} disabled={saving} className="w-full h-12 text-lg">
+              {saving ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : 'Enter Dashboard'}
             </Button>
           </CardContent>
         </Card>
@@ -142,24 +186,28 @@ export function StudentDashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-8 pb-10">
+      {/* Welcome Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold font-display mb-1">
-            Welcome back, {profile?.full_name?.split(' ')[0] || 'Student'}!
+          <h1 className="text-3xl font-bold font-display tracking-tight">
+            Hello, {profile?.full_name?.split(' ')[0] || 'Student'}! 👋
           </h1>
-          <p className="text-muted-foreground">
-            {profile?.branch} • Semester {profile?.semester}
-          </p>
+          <div className="flex items-center gap-2 mt-1 text-muted-foreground">
+            <span className="flex items-center gap-1.5 px-2 py-0.5 bg-secondary rounded-md text-xs font-semibold uppercase tracking-wider">
+              {profile?.branch}
+            </span>
+            <span>•</span>
+            <span className="text-sm">Semester {profile?.semester}</span>
+          </div>
         </div>
-        <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/settings')}>
-          Change Course
+        <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/settings')} className="rounded-full shadow-sm">
+          Update Course Details
         </Button>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Grid of Tools */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { icon: Bell, label: 'Notices', href: '/dashboard/notices', color: 'from-blue-500 to-indigo-600' },
           { icon: MessageSquare, label: 'CampusGPT', href: '/dashboard/chat', color: 'from-emerald-500 to-teal-600' },
@@ -169,39 +217,34 @@ export function StudentDashboard() {
           <button
             key={action.label}
             onClick={() => navigate(action.href)}
-            className="p-4 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-card-hover transition-all duration-200 text-left group"
+            className="p-5 rounded-2xl bg-card border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-300 text-left group relative overflow-hidden"
           >
-            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
-              <action.icon className="w-5 h-5 text-primary-foreground" />
+            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md`}>
+              <action.icon className="w-6 h-6 text-white" />
             </div>
-            <span className="font-medium">{action.label}</span>
+            <h3 className="font-bold text-card-foreground">{action.label}</h3>
+            <p className="text-xs text-muted-foreground mt-1">Open tool</p>
           </button>
         ))}
       </div>
 
-      {/* Priority Notices */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold font-display">Priority Notices</h2>
-          <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard/notices')}>
-            View all
+      {/* Priority Notices Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <h2 className="text-xl font-bold font-display italic">Priority Feed</h2>
+          </div>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard/notices')} className="text-primary hover:bg-primary/5">
+            See all notices →
           </Button>
         </div>
         
-        {notices.length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center">
-              <Bell className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
-              <p className="text-muted-foreground">No notices yet. Check back later!</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="space-y-3">
-            {notices.slice(0, 5).map((notice) => (
-              <NoticeCard key={notice.id} notice={notice} />
-            ))}
-          </div>
-        )}
+        <div className="space-y-3">
+          {notices.map((notice) => (
+            <NoticeCard key={notice.id} notice={notice} />
+          ))}
+        </div>
       </div>
     </div>
   );
