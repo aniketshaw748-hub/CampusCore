@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -55,10 +55,21 @@ const adminNav: NavItem[] = [
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { profile, isExam, userRole, signOut } = useAuth();
+  const { profile, isExam, setIsExam, userRole, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const currentLogo = isExam ? RedLogo : Logo;
+
+  // Logic: Show RedLogo if Exam Mode is ON AND we are on the /chat page
+  // Otherwise, show the standard Logo
+  const isChatPage = location.pathname.includes('/chat');
+  const showRedLogo = isExam && isChatPage;
+  
+  const currentLogo = showRedLogo ? RedLogo : Logo;
+  useEffect(() => {
+    if (!isChatPage && isExam) {
+      setIsExam(false);
+    }
+  }, [isChatPage, isExam, setIsExam]);
   const navItems = userRole === 'admin' ? adminNav : userRole === 'faculty' ? facultyNav : studentNav;
 
   const handleSignOut = async () => {
