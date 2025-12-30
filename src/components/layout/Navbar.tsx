@@ -3,6 +3,7 @@ import { GraduationCap, Menu, X, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import Logo from '@/assets/CampusCore.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,9 +24,11 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-              <GraduationCap className="w-6 h-6 text-primary-foreground" />
-            </div>
+            <img
+              src={Logo}
+              alt="CampusCore logo"
+              className="w-10 h-10 rounded-lg"
+            />
             <span className="text-xl font-bold font-display">CampusCore</span>
           </Link>
 
