@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { GraduationCap, Users, Shield, Loader2 } from 'lucide-react';
 import type { AppRole } from '@/types';
+import Logo from '@/assets/CampusCoreLogo.svg';
 
 // Firebase Imports
 import { auth, googleProvider } from '@/lib/firebase';
@@ -68,9 +69,11 @@ export default function Login() {
       <div className="max-w-3xl w-full">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 mb-6">
-            <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center">
-              <GraduationCap className="w-7 h-7 text-primary-foreground" />
-            </div>
+            <img
+              src={Logo}
+              alt="CampusCore logo"
+              className="w-10 h-10 rounded-lg"
+            />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold font-display mb-4">
             Welcome to CampusCore

@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { GraduationCap, Menu, X, LogOut, User } from 'lucide-react';
+import { Menu, X, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import Logo from '@/assets/CampusCore.png';
+import Logo from '@/assets/CampusCoreLogo.svg';
 import {
   DropdownMenu,
   DropdownMenuContent,

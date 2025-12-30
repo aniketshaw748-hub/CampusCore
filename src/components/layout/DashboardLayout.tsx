@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Logo from '@/assets/CampusCoreLogo.svg';
 import {
-  GraduationCap,
   Bell,
   MessageSquare,
   BookOpen,
@@ -70,9 +70,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile Header */}
       <header className="lg:hidden fixed top-0 left-0 right-0 h-16 glass z-50 flex items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-            <GraduationCap className="w-5 h-5 text-primary-foreground" />
-          </div>
+          <img
+              src={Logo}
+              alt="CampusCore logo"
+              className="w-10 h-10 rounded-lg"
+            />
           <span className="font-bold font-display">CampusCore</span>
         </Link>
         <button onClick={() => setSidebarOpen(!sidebarOpen)}>
@@ -90,9 +92,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       >
         {/* Logo */}
         <div className="h-16 flex items-center gap-2 px-4 border-b border-sidebar-border">
-          <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-            <GraduationCap className="w-6 h-6 text-primary-foreground" />
-          </div>
+          <img
+              src={Logo}
+              alt="CampusCore logo"
+              className="w-10 h-10 rounded-lg"
+            />
           <span className="text-xl font-bold font-display">CampusCore</span>
         </div>
 

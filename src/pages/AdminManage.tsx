@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
+import Logo from '@/assets/CampusCoreLogo.svg';
 import { 
   Users, 
   FileText, 
@@ -20,7 +21,6 @@ import {
   Eye,
   Plus,
   Edit,
-  GraduationCap
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
@@ -203,9 +203,11 @@ export default function AdminManage() {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center">
-            <GraduationCap className="w-6 h-6 text-primary-foreground" />
-          </div>
+          <img
+              src={Logo}
+              alt="CampusCore logo"
+              className="w-10 h-10 rounded-lg"
+            />
           <div>
             <h1 className="text-2xl font-bold font-display">Admin Management</h1>
             <p className="text-muted-foreground">Manage branches, subjects, and content</p>
