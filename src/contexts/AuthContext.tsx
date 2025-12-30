@@ -7,6 +7,8 @@ interface AuthContextType {
   profile: Profile | null;
   userRole: AppRole | null;
   loading: boolean;
+  isExam: boolean;
+  setIsExam: (val: boolean) => void;
   setDemoRole: (role: AppRole) => void;
   signOut: () => void;
   updateProfile: (updates: Partial<Profile>) => void;
@@ -20,6 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return localStorage.getItem('user_role') as AppRole | null;
   });
   const [loading, setLoading] = useState(true);
+  const [isExam, setIsExam] = useState(false);
 
   useEffect(() => {
     // This is the core Firebase listener
@@ -78,6 +81,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setDemoRole,
       signOut,
       updateProfile,
+      isExam,
+      setIsExam,
     }}>
       {children}
     </AuthContext.Provider>

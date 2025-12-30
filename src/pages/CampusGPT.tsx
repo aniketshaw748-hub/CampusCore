@@ -16,6 +16,7 @@ import { ExamModeToggle } from '@/components/exam-mode/ExamModeToggle';
 import { ExamModeIndicator } from '@/components/exam-mode/ExamModeIndicator';
 import { ExamConfigFlow } from '@/components/exam-mode/ExamConfigFlow';
 import { ExamResourcesPanel } from '@/components/exam-mode/ExamResourcesPanel';
+import { set } from 'date-fns';
 
 interface Message {
   id: string;
@@ -120,7 +121,7 @@ const FormattedMessage = ({ content }: { content: string }) => {
 };
 
 function CampusGPTContent() {
-  const { profile, userRole } = useAuth();
+  const { profile, userRole, isExam, setIsExam } = useAuth();
   const { isExamMode, examContext } = useExamMode();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -161,7 +162,9 @@ function CampusGPTContent() {
       setIsLoadingMemory(false);
     }
   }, [profile?.id]);
-
+  useEffect(() => {
+    setIsExam(isExamMode);
+  }, [setIsExam, isExamMode]);
   useEffect(() => { loadUserData(); }, [loadUserData]);
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [messages]);
 
