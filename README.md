@@ -7,7 +7,6 @@ CampusCore is a role-based academic platform designed for college students and f
 ## 🚀 Overview
 
 CampusCore provides:
-
 - Separate dashboards for **Students**, **Faculty**, and **Admins**
 - Faculty-driven academic content (notices, syllabus, study materials)
 - Student personal notes and uploads
@@ -21,7 +20,6 @@ The goal is to offer a **college-first alternative to generic AI chatbots**, opt
 ## 🧑‍🎓 Key Features
 
 ### Student
-
 - Personalized dashboard
 - Priority-based notices
 - CampusGPT (normal mode + exam mode)
@@ -29,13 +27,11 @@ The goal is to offer a **college-first alternative to generic AI chatbots**, opt
 - Personal notes management
 
 ### Faculty
-
 - Upload syllabus, notices, and study materials
 - Set urgency, deadlines, and exam relevance
 - Faculty dashboard with recent uploads
 
 ### Admin
-
 - Separate admin dashboard
 - User and content management (extensible)
 
@@ -54,7 +50,6 @@ The goal is to offer a **college-first alternative to generic AI chatbots**, opt
 ## 🛠 Tech Stack
 
 ### Frontend
-
 - React
 - TypeScript
 - Vite
@@ -63,7 +58,6 @@ The goal is to offer a **college-first alternative to generic AI chatbots**, opt
 - Lucide Icons
 
 ### Architecture (Planned Backend)
-
 - Gemini-powered AI (via RAG)
 - Vector database for academic content
 - Metadata-driven retrieval and personalization
@@ -73,7 +67,6 @@ The goal is to offer a **college-first alternative to generic AI chatbots**, opt
 ## 📦 Getting Started (Local Development)
 
 ### Prerequisites
-
 - Node.js (18+ recommended)
 - npm (or compatible package manager)
 
@@ -88,9 +81,6 @@ cd campuscore
 
 # Install dependencies
 npm install
-
-# Create environment variables file
-copy .env.example .env
 
 # Start the development server
 npm run dev
@@ -129,4 +119,3 @@ License and usage terms will be defined later.
 ✨ Summary
 
 CampusCore is a college-focused academic platform with an exam-aware AI assistant designed to help students prepare smarter, not harder.
-```
