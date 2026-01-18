@@ -107,7 +107,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         {/* Logo */}
         <div className="h-16 flex items-center gap-2 px-4 border-b border-sidebar-border">
           <img src={currentLogo} alt="Logo" className="w-10 h-10 rounded-lg transition-all duration-500" />
-          <span className={cn("text-xl font-bold", isExam && "text-destructive")}>
+          <span className={cn("text-xl font-bold")}>
             CampusCore
           </span>
         </div>
