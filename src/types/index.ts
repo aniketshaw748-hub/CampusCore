@@ -9,6 +9,8 @@ export interface Profile {
   avatar_url: string | null;
   branch: string | null;
   semester: number | null;
+  department?: string;
+  teaching_subjects?: string[];
   created_at: string;
   updated_at: string;
 }

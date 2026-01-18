@@ -9,146 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Bell, Search, Loader2, BookOpen, Building2 } from 'lucide-react';
 import type { FacultyUpload } from '@/types';
 import { Button } from '@/components/ui/button';
+import { DEMO_NOTICES } from "@/data/demoNotices";
 
-// --- EXPANDED DEMO DATA ---
-const DEMO_NOTICES: FacultyUpload[] = [
-  {
-    id: 'demo-1',
-    uploaded_by: 'admin',
-    title: 'End-Semester Theory Exam Schedule',
-    description: 'The official timetable for the Winter 2025 examinations has been released. Exams begin from Jan 15th.',
-    content_type: 'notice',
-    file_url: '#',
-    file_name: 'exam_timetable_v1.pdf',
-    branch_id: 'all', // Special case for all branches
-    semester: null,
-    subject_id: null,
-    urgency: 'high',
-    deadline: '2025-01-15T09:00:00Z',
-    is_exam_related: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: 'demo-2',
-    uploaded_by: 'faculty',
-    title: 'Machine Learning Lab Manual',
-    description: 'Updated lab manual for Semester 6 Computer Science. Includes new experiments on Neural Networks.',
-    content_type: 'study_material',
-    file_url: '#',
-    file_name: 'ML_Lab_Manual.pdf',
-    branch_id: 'CS',
-    semester: 6,
-    subject_id: 'CS601',
-    urgency: 'low',
-    deadline: null,
-    is_exam_related: false,
-    created_at: new Date(Date.now() - 86400000).toISOString(),
-    updated_at: new Date(Date.now() - 86400000).toISOString(),
-  },
-  {
-    id: 'demo-3',
-    uploaded_by: 'faculty',
-    title: 'Microprocessor Assignment #3',
-    description: 'Submit the 8085 assembly language programs via the portal. Late submission will result in mark deduction.',
-    content_type: 'assignment',
-    file_url: '#',
-    file_name: 'assignment_3.docx',
-    branch_id: 'EC',
-    semester: 4,
-    subject_id: 'EC402',
-    urgency: 'medium',
-    deadline: new Date(Date.now() + 172800000).toISOString(),
-    is_exam_related: false,
-    created_at: new Date(Date.now() - 43200000).toISOString(),
-    updated_at: new Date(Date.now() - 43200000).toISOString(),
-  },
-  {
-    id: 'demo-4',
-    uploaded_by: 'admin',
-    title: 'Mechanical Workshop Safety Protocols',
-    description: 'Mandatory reading for Sem 2 students before entering the workshop for the first time.',
-    content_type: 'notice',
-    file_url: '#',
-    file_name: 'safety_first.pdf',
-    branch_id: 'ME',
-    semester: 2,
-    subject_id: null,
-    urgency: 'high',
-    deadline: null,
-    is_exam_related: false,
-    created_at: new Date(Date.now() - 259200000).toISOString(),
-    updated_at: new Date(Date.now() - 259200000).toISOString(),
-  },
-  {
-    id: 'demo-5',
-    uploaded_by: 'faculty',
-    title: 'Civil Engineering: Surveying Field Book',
-    description: 'Sample field book entries for the upcoming site visit to the city bypass project.',
-    content_type: 'study_material',
-    file_url: '#',
-    file_name: 'survey_samples.pdf',
-    branch_id: 'CE',
-    semester: 4,
-    subject_id: 'CE403',
-    urgency: 'low',
-    deadline: null,
-    is_exam_related: false,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: 'demo-6',
-    uploaded_by: 'admin',
-    title: 'Campus Recruitment Drive: Google',
-    description: 'Final year students (Sem 8) from CS and EC branches are eligible. Register on the placement portal.',
-    content_type: 'notice',
-    file_url: '#',
-    file_name: 'job_description_google.pdf',
-    branch_id: 'CS',
-    semester: 8,
-    subject_id: null,
-    urgency: 'high',
-    deadline: new Date(Date.now() + 432000000).toISOString(),
-    is_exam_related: false,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: 'demo-7',
-    uploaded_by: 'faculty',
-    title: 'Electrical Machines - Important Questions',
-    description: 'A list of 50 expected questions for the upcoming remedial exams.',
-    content_type: 'study_material',
-    file_url: '#',
-    file_name: 'EE_Imp_Questions.pdf',
-    branch_id: 'EE',
-    semester: 5,
-    subject_id: 'EE501',
-    urgency: 'medium',
-    deadline: null,
-    is_exam_related: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: 'demo-8',
-    uploaded_by: 'admin',
-    title: 'Cultural Festival Volunteer List',
-    description: 'Students from any branch and any semester can apply to be a volunteer for "CampusFest 2025".',
-    content_type: 'notice',
-    file_url: '#',
-    file_name: null,
-    branch_id: 'all',
-    semester: null,
-    subject_id: null,
-    urgency: 'low',
-    deadline: new Date(Date.now() + 864000000).toISOString(),
-    is_exam_related: false,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  }
-];
+
+
 
 export default function Notices() {
   const { profile } = useAuth();
@@ -170,9 +34,9 @@ export default function Notices() {
 
   const fetchNotices = async () => {
     try {
-      const q = query(collection(db, 'faculty_uploads'), orderBy('created_at', 'desc'));
-      const querySnapshot = await getDocs(q);
-      const dbNotices = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as FacultyUpload[];
+      // const q = query(collection(db, 'faculty_uploads'), orderBy('created_at', 'desc'));
+      // const querySnapshot = await getDocs(q);
+      // const dbNotices = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as FacultyUpload[];
       setNotices([...dbNotices, ...DEMO_NOTICES]);
     } catch (error) {
       setNotices(DEMO_NOTICES);

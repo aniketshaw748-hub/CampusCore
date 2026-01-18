@@ -17,6 +17,8 @@ import {
   FileText,
   Users,
   Home,
+  Video,
+  Building2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -32,6 +34,8 @@ const studentNav: NavItem[] = [
   { icon: Bell, label: 'Notices', href: '/dashboard/notices' },
   { icon: MessageSquare, label: 'CampusGPT', href: '/dashboard/chat' },
   { icon: BookOpen, label: 'Exam Mode', href: '/dashboard/exam' },
+  { icon: Video, label: "Classes", href: "/dashboard/classes" },
+
   { icon: FileText, label: 'My Notes', href: '/dashboard/notes' },
   { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
 ];
@@ -40,15 +44,17 @@ const facultyNav: NavItem[] = [
   { icon: Home, label: 'Dashboard', href: '/dashboard' },
   { icon: Upload, label: 'Upload Content', href: '/dashboard/upload' },
   { icon: FileText, label: 'My Uploads', href: '/dashboard/my-uploads' },
+  { icon: Video, label: "MyClasses", href: "/dashboard/my-classes" },
   { icon: Bell, label: 'All Notices', href: '/dashboard/notices' },
   { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
 ];
 
 const adminNav: NavItem[] = [
   { icon: Home, label: 'Dashboard', href: '/dashboard' },
+  { icon: Building2, label: 'Campus', href: '/dashboard/campus' },
+  { icon: Users, label: 'Manage', href: '/dashboard/manage' },
   { icon: Upload, label: 'Upload Content', href: '/dashboard/upload' },
   { icon: FileText, label: 'All Content', href: '/dashboard/my-uploads' },
-  { icon: Users, label: 'Manage', href: '/dashboard/manage' },
   { icon: Bell, label: 'All Notices', href: '/dashboard/notices' },
   { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
 ];

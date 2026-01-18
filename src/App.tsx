@@ -17,6 +17,11 @@ import Settings from "./pages/Settings";
 import AdminManage from "./pages/AdminManage";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/login";
+import Classes from "./pages/Classes";
+import MyClasses from "./pages/MyClasses";
+import MyUploads from "./pages/MyUploads";
+import AdminCampus from "./pages/AdminCampus";
+import CampusSetup from "./pages/CampusSetup";
 
 const queryClient = new QueryClient();
 
@@ -39,7 +44,11 @@ const App = () => (
               <Route path="/dashboard/notes" element={<MyNotes />} />
               <Route path="/dashboard/settings" element={<Settings />} />
               <Route path="/dashboard/manage" element={<AdminManage />} />
-              <Route path="/dashboard/my-uploads" element={<Notices />} />
+              <Route path="/dashboard/classes" element={<Classes />} />
+              <Route path="/dashboard/my-classes" element={<MyClasses />} />
+              <Route path="/dashboard/my-uploads" element={<MyUploads />} />
+              <Route path="/dashboard/campus" element={<AdminCampus />} />
+              <Route path="/campus-setup" element={<CampusSetup />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

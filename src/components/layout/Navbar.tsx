@@ -12,7 +12,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
+// import { useNavigate, Link } from 'react-router-dom';
+ 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { profile, userRole, signOut } = useAuth();
@@ -37,13 +38,34 @@ export function Navbar() {
             <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
               Home
             </Link>
-            <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
+
+            <button
+              onClick={() =>
+                document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
               Features
-            </a>
-            <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors">
+            </button>
+
+            <button
+              onClick={() =>
+                document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
               About
-            </a>
+            </button>
+
+            {/* NEW */}
+            <Link
+              to="/campus-setup"
+              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+            >
+              SetUp
+            </Link>
           </div>
+
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center gap-3">

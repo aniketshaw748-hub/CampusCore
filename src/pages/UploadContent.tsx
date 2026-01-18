@@ -13,6 +13,11 @@ import { Label } from '@/components/ui/label';
 import { Upload, Loader2, FileText, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Branch, Subject, ContentType, UrgencyLevel } from '@/types';
+import {
+  loadFacultyUploads,
+  saveFacultyUploads,
+} from "@/utils/facultyUploadsStorage";
+
 
 export default function UploadContent() {
   const { profile, userRole, loading: authLoading } = useAuth();
@@ -66,68 +71,145 @@ export default function UploadContent() {
     
     if (data) setSubjects(data as Subject[]);
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!title.trim()) {
-      toast.error('Please enter a title');
-      return;
+  e.preventDefault();
+
+  if (!title.trim()) {
+    toast.error("Please enter a title");
+    return;
+  }
+
+  if (!profile?.id) {
+    toast.error("User not authenticated");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    let fileUrl: string | null = null;
+
+    if (file) {
+      fileUrl = URL.createObjectURL(file); // same as My Notes
     }
 
-    setLoading(true);
+    const newUpload = {
+      id: crypto.randomUUID(),
+      title,
+      description: description || null,
+      content_type: contentType,
+      file_name: file?.name || null,
+      file_url: fileUrl,
+      urgency,
+      created_at: new Date().toISOString(),
+    };
+
+    const existing = loadFacultyUploads(profile.id);
+    saveFacultyUploads(profile.id, [newUpload, ...existing]);
+
+    setSuccess(true);
+    toast.success("Content uploaded successfully!");
+
+    setTimeout(() => {
+      setSuccess(false);
+      setTitle("");
+      setDescription("");
+      setContentType("notice");
+      setSelectedBranch("");
+      setSelectedSemester("");
+      setSelectedSubject("");
+      setUrgency("low");
+      setDeadline("");
+      setIsExamRelated(false);
+      setFile(null);
+    }, 1500);
+  } catch (err: any) {
+    toast.error(err.message || "Upload failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
     
-    try {
-      let fileUrl = null;
-      let fileName = null;
+  //   if (!title.trim()) {
+  //     toast.error('Please enter a title');
+  //     return;
+  //   }
 
-      if (file) {
-        fileUrl = `https://example.com/files/${file.name}`;
-        fileName = file.name;
-      }
+  //   setLoading(true);
+    
+  //   try {
+  //     let fileUrl = null;
+  //     let fileName = null;
 
-      const branch = branches.find(b => b.code === selectedBranch);
+  //     if (file) {
+  //       fileUrl = `https://example.com/files/${file.name}`;
+  //       fileName = file.name;
+  //     }
 
-      const { error } = await supabase.from('faculty_uploads').insert({
-        uploaded_by: profile.full_name,
-        title,
-        description: description || null,
-        content_type: contentType,
-        file_url: fileUrl,
-        file_name: fileName,
-        branch_id: branch?.id || null,
-        semester: selectedSemester ? parseInt(selectedSemester) : null,
-        subject_id: selectedSubject || null,
-        urgency,
-        deadline: deadline || null,
-        is_exam_related: isExamRelated,
-      });
+  //     const branch = branches.find(b => b.code === selectedBranch);
 
-      if (error) throw error;
+  //     const { error } = await supabase.from('faculty_uploads').insert({
+  //       uploaded_by: profile.id,
+  //       title,
+  //       description: description || null,
+  //       content_type: contentType,
+  //       file_url: fileUrl,
+  //       file_name: fileName,
+  //       branch_id: branch?.id || null,
+  //       semester: selectedSemester ? parseInt(selectedSemester) : null,
+  //       subject_id: selectedSubject || null,
+  //       urgency,
+  //       deadline: deadline || null,
+  //       is_exam_related: isExamRelated,
+  //     });
 
-      setSuccess(true);
-      toast.success('Content uploaded successfully!');
+  //     if (error) throw error;
+
+  //     // store locally per faculty
+  //     if (profile?.id) {
+  //       const existing = loadFacultyUploads(profile.id);
+
+  //       const localUpload = {
+  //         id: crypto.randomUUID(),
+  //         title,
+  //         description: description || null,
+  //         content_type: contentType,
+  //         file_name: file?.name || null,
+  //         urgency,
+  //         created_at: new Date().toISOString(),
+  //       };
+
+  //       saveFacultyUploads(profile.id, [localUpload, ...existing]);
+  //     }
+
+  //     setSuccess(true);
+  //     toast.success("Content uploaded successfully!");
+
       
-      // Reset form after delay
-      setTimeout(() => {
-        setSuccess(false);
-        setTitle('');
-        setDescription('');
-        setContentType('notice');
-        setSelectedBranch('');
-        setSelectedSemester('');
-        setSelectedSubject('');
-        setUrgency('low');
-        setDeadline('');
-        setIsExamRelated(false);
-        setFile(null);
-      }, 2000);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to upload content');
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     // Reset form after delay
+  //     setTimeout(() => {
+  //       setSuccess(false);
+  //       setTitle('');
+  //       setDescription('');
+  //       setContentType('notice');
+  //       setSelectedBranch('');
+  //       setSelectedSemester('');
+  //       setSelectedSubject('');
+  //       setUrgency('low');
+  //       setDeadline('');
+  //       setIsExamRelated(false);
+  //       setFile(null);
+  //     }, 2000);
+  //   } catch (error: any) {
+  //     toast.error(error.message || 'Failed to upload content');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   if (authLoading) {
     return (
@@ -141,7 +223,7 @@ export default function UploadContent() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-2xl mx-auto">
+      <div className=" mx-auto">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
